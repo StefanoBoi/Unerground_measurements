@@ -1,0 +1,1 @@
+hadd 512_merge.root events_20181205-113029.root events_20181213-094256.root events_20181231-091501.root events_20190109-111057.root events_20190117-112204.root #target source 1 source2 source 3 ... source n 

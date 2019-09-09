@@ -1,0 +1,2 @@
+events_20181123-093751.csv	dati esterni miniera
+events_20181123-113012.csv	dati -80 m s.l.m.

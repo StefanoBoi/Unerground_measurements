@@ -1,0 +1,67 @@
+#include <iostream>
+#include <sstream>
+#include<string>
+
+using namespace std;
+
+int CBconverter(char name[100])
+{
+  ifstream in;
+  in.open(Form("./%s.csv", name));
+
+  cout << endl << endl << name << endl << endl;
+
+  if(!in.is_open())
+    {
+      cout << endl << endl << "Error opening file" << endl << endl;
+      return -1;
+    }
+
+
+  TFile *file = new TFile(Form("%s.root", name), "RECREATE");
+  TTree *tree[5];
+  tree[0] = new TTree("tot", "tot");
+  tree[1] = new TTree("GPIO5", "GPIO5");
+  tree[2] = new TTree("GPIO22", "GPIO22");
+  tree[3] = new TTree("GPIO23", "GPIO23");
+  tree[4] = new TTree("GPIO24", "GPIO24");
+
+  Int_t GPIO;
+  Double_t time;
+  tree[0]->Branch("GPIO", &GPIO, "GPIO/I");
+  tree[0]->Branch("time", &time, "time/D");
+
+  tree[1]->Branch("time", &time, "time/D");
+  tree[2]->Branch("time", &time, "time/D");
+  tree[3]->Branch("time", &time, "time/D");
+  tree[4]->Branch("time", &time, "time/D");
+
+
+  string str;
+  
+  while(in.good())
+    {
+      getline(in, str, ',');
+      istringstream value (str);
+      value >> GPIO;
+      
+      getline(in, str, '\n');
+      istringstream value (str);
+      value >> time;
+            
+      tree[0]->Fill();
+
+      if(GPIO == 5) tree[1]->Fill();
+      if(GPIO == 22) tree[2]->Fill();
+      if(GPIO == 23) tree[3]->Fill();
+      if(GPIO == 24) tree[4]->Fill();
+  }
+
+  cout << endl << endl << tree[0]->GetEntries() << endl << endl;
+  
+  in.close();
+  file->Write();
+  file->Close();
+  
+  return 0;
+}
